@@ -193,11 +193,11 @@ module.provider("$mdpTimePicker", function() {
     };
     
     this.$get = ["$mdDialog", function($mdDialog) {
-        var timePicker = function(time, options) {
+        var timePicker = function(time, options, dialogOptions={}) {
             if(!angular.isDate(time)) time = Date.now();
             if (!angular.isObject(options)) options = {};
     
-            return $mdDialog.show({
+            var standardOptions = {
                 controller:  ['$scope', '$mdDialog', 'time', 'autoSwitch', '$mdMedia', TimePickerCtrl],
                 controllerAs: 'timepicker',
                 clickOutsideToClose: true,
@@ -233,7 +233,10 @@ module.provider("$mdpTimePicker", function() {
                     autoSwitch: options.autoSwitch
                 },
                 skipHide: true
-            });
+            };
+            var merged = {};
+            Object.assign(merged, standardOptions, dialogOptions);
+            return $mdDialog.show(merged);
         };
     
         return timePicker;

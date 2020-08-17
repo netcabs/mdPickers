@@ -112,13 +112,13 @@ module.provider("$mdpDatePicker", function() {
     };
     
     this.$get = ["$mdDialog", function($mdDialog) {
-        var datePicker = function(currentDate, options) {
+        var datePicker = function(currentDate, options, dialogOptions={}) {
             if (!angular.isDate(currentDate)) currentDate = Date.now();
             if (!angular.isObject(options)) options = {};
             
             options.displayFormat = DISPLAY_FORMAT;
     
-            return $mdDialog.show({
+            var standardOptions = {
                 controller:  ['$scope', '$mdDialog', '$mdMedia', '$timeout', 'currentDate', 'options', DatePickerCtrl],
                 controllerAs: 'datepicker',
                 clickOutsideToClose: true,
@@ -153,7 +153,10 @@ module.provider("$mdpDatePicker", function() {
                     options: options
                 },
                 skipHide: true
-            });
+            };
+            var merged = {};
+            Object.assign(merged, standardOptions, dialogOptions);
+            return $mdDialog.show(merged);
         };
     
         return datePicker;

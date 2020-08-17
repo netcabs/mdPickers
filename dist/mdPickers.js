@@ -173,13 +173,13 @@ module.provider("$mdpDatePicker", function() {
     };
     
     this.$get = ["$mdDialog", function($mdDialog) {
-        var datePicker = function(currentDate, options) {
+        var datePicker = function(currentDate, options, dialogOptions={}) {
             if (!angular.isDate(currentDate)) currentDate = Date.now();
             if (!angular.isObject(options)) options = {};
             
             options.displayFormat = DISPLAY_FORMAT;
     
-            return $mdDialog.show({
+            var standardOptions = {
                 controller:  ['$scope', '$mdDialog', '$mdMedia', '$timeout', 'currentDate', 'options', DatePickerCtrl],
                 controllerAs: 'datepicker',
                 clickOutsideToClose: true,
@@ -214,7 +214,10 @@ module.provider("$mdpDatePicker", function() {
                     options: options
                 },
                 skipHide: true
-            });
+            };
+            var merged = {};
+            Object.assign(merged, standardOptions, dialogOptions);
+            return $mdDialog.show(merged);
         };
     
         return datePicker;
@@ -577,6 +580,7 @@ module.directive("mdpDatePicker", ["$mdpDatePicker", "$timeout", function($mdpDa
         }
     }
 }]);
+
 /* global moment, angular */
 
 function TimePickerCtrl($scope, $mdDialog, time, autoSwitch, $mdMedia) {
@@ -772,11 +776,11 @@ module.provider("$mdpTimePicker", function() {
     };
     
     this.$get = ["$mdDialog", function($mdDialog) {
-        var timePicker = function(time, options) {
+        var timePicker = function(time, options, dialogOptions={}) {
             if(!angular.isDate(time)) time = Date.now();
             if (!angular.isObject(options)) options = {};
     
-            return $mdDialog.show({
+            var standardOptions = {
                 controller:  ['$scope', '$mdDialog', 'time', 'autoSwitch', '$mdMedia', TimePickerCtrl],
                 controllerAs: 'timepicker',
                 clickOutsideToClose: true,
@@ -812,7 +816,10 @@ module.provider("$mdpTimePicker", function() {
                     autoSwitch: options.autoSwitch
                 },
                 skipHide: true
-            });
+            };
+            var merged = {};
+            Object.assign(merged, standardOptions, dialogOptions);
+            return $mdDialog.show(merged);
         };
     
         return timePicker;
